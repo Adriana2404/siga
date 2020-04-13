@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListProveedorTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+             <style>
+                figure{
+                    width:100%; 
+                    overflow:hidden; 
+                    margin:0;
+                    position: relative;
+                 }
+                 figure img{
+                    display:block; 
+                    width:100%;
+                 }
+                 figure img{
+                    /*add to other styles*/
+                    margin:-43.075% 0 -3.875% 0;
+                 }
+            </style>
+            <figure>
+                <p:graphicImage library="img" name="campo.jpg" style="width: 100%" />
+                <div class="textBanner">
+                    <span class="headerText">
+                        #{bundle.SuppliersModule} - #{bundle.ListProveedorTitle}
+                    </span>
+                    
+                </div> 
+            </figure>
+            <h:form id="ProveedorListForm">
+                <p:panel>
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="excel.png" width="24" height="24"/>
+                        <p:dataExporter type="xls" target="datalist" fileName="Proveedorreport" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="pdf.png" width="24" height="24"/>
+                        <p:dataExporter type="pdf" target="datalist" fileName="Proveedorreport" pageOnly="true" />
+                    </h:commandLink>
+
+                    <p:dataTable id="datalist" value="#{proveedorController.items}" var="item"
+                                 selectionMode="single" selection="#{proveedorController.selected}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 rowKey="#{item.idProveedor}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column filterBy="#{item.nit}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_nit}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nit}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.nombre}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_nombre}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.telefono}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_telefono}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.telefono}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.direccion}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_direccion}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.direccion}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.email}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_email}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.email}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.barrio}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProveedorTitle_barrio}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.barrio.ciudad.nombreCiudad} - #{item.barrio.nombreBarrio}"/>
+                        </p:column>
+                        <f:facet name="header">
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{proveedorController.prepareCreate}" update=":ProveedorCreateForm" oncomplete="PF('ProveedorCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ProveedorViewForm" oncomplete="PF('ProveedorViewDialog').show()" disabled="#{empty proveedorController.selected}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ProveedorEditForm" oncomplete="PF('ProveedorEditDialog').show()" disabled="#{empty proveedorController.selected}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{proveedorController.destroy}" update=":growl,datalist" disabled="#{empty proveedorController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListFacturaTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <style>
+                figure{
+                    width:100%; 
+                    overflow:hidden; 
+                    margin:0;
+                    position: relative;
+                 }
+                 figure img{
+                    display:block; 
+                    width:100%;
+                 }
+                 figure img{
+                    /*add to other styles*/
+                    margin:-21.8% 0;
+                 }
+            </style>
+            <figure>
+                <p:graphicImage library="img" name="ventas.jpg" style="width: 100%" />
+                <div class="textBanner">
+                    <span class="headerText">
+                        <h:outputText value="#{bundle.SalesModule} - #{bundle.ListFacturaTitle}" rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}"/>
+                        <h:outputText value="#{bundle.Order}" rendered="#{request.getSession(false).getAttribute('role') == 'Cliente'}"/>
+                        
+                    </span>
+                    
+                </div> 
+            </figure>
+            <h:form id="FacturaListForm">
+                <p:panel>
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="excel.png" width="24" height="24"/>
+                        <p:dataExporter type="xls" target="datalist" fileName="Facturareport" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="pdf.png" width="24" height="24"/>
+                        <p:dataExporter type="pdf" target="datalist" fileName="Facturareport" pageOnly="true" />
+                    </h:commandLink>
+
+                    <p:dataTable id="datalist" value="#{facturaController.items}" var="item"
+                                 selectionMode="single" selection="#{facturaController.selected}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 rowKey="#{item.idFactura}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect" listener="#{facturaController.rowSelected}"  update="createButton viewButton deleteButton stateButton createPrButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton deleteButton stateButton createPrButton"/>
+                        <p:column filterBy="#{item.numfactura}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListFacturaTitle_numfactura}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.numfactura}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.fecha}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListFacturaTitle_fecha}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fecha}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" filterBy="#{item.vendedor}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListFacturaTitle_vendedor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.vendedor.primerNombre} #{item.vendedor.primerApellido}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.estado}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.state}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.estado}"/>
+                        </p:column>
+                        <f:facet name="header">
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') == 'Cliente'}" id="createButton" icon="ui-icon-plus"   value="#{bundle.Generate}" actionListener="#{facturaController.prepareCreate}" update=":FacturaCreateForm" oncomplete="PF('FacturaCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.ViewReceipt}" update=":FacturaViewForm" oncomplete="PF('FacturaViewDialog').show()" actionListener="#{facturaController.prepareShow}" disabled="#{empty facturaController.selected}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{facturaController.destroy}" update=":growl,datalist" disabled="#{empty facturaController.selected or facturaController.selected.estado.equals('Terminado')}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" id="stateButton" icon="ui-icon-check"  value="Finalizar" actionListener="#{facturaController.finish}" update=":growl,datalist" disabled="#{empty facturaController.selected or facturaController.selected.estado.equals('Terminado')}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') == 'Cliente'}" id="createPrButton" icon="ui-icon-plus"   value="Añadir Productos" actionListener="#{productosporventaController.prepareCreate}" disabled="#{empty facturaController.selected or facturaController.selected.estado.equals('Terminado')}" update=":ProductosporventaCreateForm" oncomplete="PF('ProductosporventaCreateDialog').show()"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+            <ui:include src="CreatePr.xhtml"/>
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListProductoTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <style>
+                figure{
+                    width:100%;
+                    overflow:hidden; 
+                    margin:0; 
+                    position: relative;
+                 }
+                 figure img{
+                    display:block;
+                    width:100%;
+                 }
+                 figure img{
+                    margin:-8.875% 0;
+                 }
+            </style>
+            <figure>
+                <p:graphicImage library="img" name="fibras-vegetales.jpg" style="width: 100%" />
+                <div class="textBanner">
+                    <span class="headerText">
+                        #{bundle.ProductsModule} - #{bundle.ListProductoTitle}
+                    </span>                  
+                </div> 
+            </figure>
+            <h:form id="ProductoListForm">
+                <p:panel>
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="excel.png" width="24" height="24"/>
+                        <p:dataExporter type="xls" target="datalist" fileName="Productoreport" pageOnly="true"/>
+                    </h:commandLink>
+
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="pdf.png" width="24" height="24"/>
+                        <p:dataExporter type="pdf" target="datalist" fileName="Productoreport" pageOnly="true" />
+                    </h:commandLink>
+
+                    <p:dataTable id="datalist" value="#{productoController.items}" var="item"
+                                 selectionMode="single" selection="#{productoController.selected}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 rowKey="#{item.idProducto}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column filterBy="#{item.nombreProducto}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_nombreProducto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombreProducto}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.existenciasTotales}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_existenciasTotales}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.existenciasTotales}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.contenido}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_contenido}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.contenido}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.unidadDeMedida}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_unidadDeMedida}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.unidadDeMedida}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.valor}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_valor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.valor}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.proveedor}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_proveedor}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.proveedor.nit} - #{item.proveedor.nombre}"/>
+                        </p:column>
+                        <p:column filterBy="#{item.tipoProducto}" filterMatchMode="contains">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListProductoTitle_tipoProducto}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.tipoProducto.nombre}"/>
+                        </p:column>
+                        <f:facet name="header">
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{productoController.prepareCreate}" update=":ProductoCreateForm" oncomplete="PF('ProductoCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":ProductoViewForm" oncomplete="PF('ProductoViewDialog').show()" disabled="#{empty productoController.selected}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":ProductoEditForm" oncomplete="PF('ProductoEditDialog').show()" disabled="#{empty productoController.selected}"/>
+                            <p:commandButton rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{productoController.destroy}" update=":growl,datalist" disabled="#{empty productoController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

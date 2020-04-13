@@ -1,0 +1,162 @@
+
+
+body{
+ background: white;
+ 
+ font-family:'calibri';
+ font-size: 3opx;
+ }
+
+ .footer{
+    background-color: white ;
+    width: 100%;
+    height: 130px;
+    bottom: 0;
+    text-align: droite;
+    color: black;
+
+}
+.navbar {
+	
+	Background-color: #3366CC;
+	
+}
+
+
+ .whiteb {
+	 
+	 background-color: white;
+	 
+	 
+ }
+ 
+
+
+body {
+  padding-top: 20px;
+}
+
+.footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+  Background-color: #3366CC;
+  color: white;
+
+}
+
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+}
+
+
+
+.nav-link {
+	
+	
+    color: white;
+
+}
+
+
+.navbar a.navbar-brand {
+	
+	color: white;
+	
+}
+
+	
+
+
+.img-full {
+	background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+	background-image: url("espacio.jpg");
+	padding-top: 100px;padding-bottom: 100px;
+	color: white;
+	text-shadow: 2px 2px 2px #000000;
+}
+
+
+.container {
+margin-right: auto;
+margin-left: auto;
+padding-right: 15px;
+padding-left: 15px;
+width: 100%;
+}
+
+.dropdown-menu {
+	
+Background-color: #3366CC;	
+	
+}
+
+
+.dropdown-item {
+	
+	    color: white;
+
+	
+}
+
+
+form {
+    margin:0 ;
+    width:400px;
+    
+}
+ 
+input, textarea {
+    width:380px;
+    height:27px;
+    background:#ffff;
+    border: 2px solid #3366cc;
+    padding:10px;
+    margin-top:5px;
+    font-size:10px;
+    color: black ;
+}
+ 
+
+ 
+textarea {
+    height:150px;
+}
+ 
+#submit {
+    width:85px;
+    height:35px;
+    border:none;
+    margin-top:20px;
+    cursor:pointer;
+        background-color: #3366cc;
+    color: white;
+}
+
+.login-box{
+    width: 50%;
+    margin: auto;
+    padding: 30px;
+    font-family: 'calibri';
+    border-radius: 20px;
+    background-color: #252525b8;
+    
+}
+
+.login-box .row{
+    margin-top: 10px;
+}
+
+.login-box label{
+    float: left;
+}
+
+.submit-button{
+    height: auto;
+    width: 100%;
+
+}

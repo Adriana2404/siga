@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+       
+        <p:dialog id="ProductosporventaCreateDlg" widgetVar="ProductosporventaCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateProductosporventaTitle}">
+            <f:metadata>
+                <f:viewAction action="#{productosporventaController.prepareCreate}" />
+            </f:metadata>
+            <h:form id="ProductosporventaCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{productosporventaController.selected != null}">
+                        <p:outputLabel value="Producto: " for="tipoProducto" />
+                        <p:selectOneMenu id="tipoProducto" value="#{productosporventaController.selected.productosporventaPK.productoidProducto}" required="true" requiredMessage="#{bundle.EditProductoRequiredMessage_tipoProducto}">
+                            <f:selectItems value="#{productoController.itemsAvailableSelectOne}" 
+                                           var="productoItem" itemLabel="#{productoItem.nombreProducto}"
+                                           itemValue="#{productoItem.idProducto}"/>
+                        </p:selectOneMenu>
+             
+                       
+                        
+                        <p:outputLabel value="#{bundle.CreateProductosporventaLabel_cantidadProductos}" for="cantidadProductos" />
+                        <p:inputText id="cantidadProductos" value="#{productosporventaController.selected.cantidadProductos}" title="#{bundle.CreateProductosporventaTitle_cantidadProductos}" required="true" requiredMessage="#{bundle.CreateProductosporventaRequiredMessage_cantidadProductos}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{productosporventaController.create}" value="#{bundle.Save}" oncomplete="handleSubmit(args,'ProductosporventaCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ProductosporventaCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

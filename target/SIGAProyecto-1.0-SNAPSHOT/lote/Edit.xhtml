@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="LoteEditDlg" widgetVar="LoteEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditLoteTitle}">
+            <h:form id="LoteEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{loteController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditLoteLabel_idLote}" for="idLote" />
+                        <p:inputText disabled="true" id="idLote" value="#{loteController.selected.idLote}" title="#{bundle.EditLoteTitle_idLote}" required="true" requiredMessage="#{bundle.EditLoteRequiredMessage_idLote}"/>
+                        <p:outputLabel value="#{bundle.EditLoteLabel_fechafabricacion}" for="fechafabricacion" />
+                        <p:calendar id="fechafabricacion" pattern="MM/dd/yyyy" value="#{loteController.selected.fechafabricacion}" title="#{bundle.EditLoteTitle_fechafabricacion}" required="true" requiredMessage="#{bundle.EditLoteRequiredMessage_fechafabricacion}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditLoteLabel_fechavencimiento}" for="fechavencimiento" />
+                        <p:calendar id="fechavencimiento" pattern="MM/dd/yyyy" value="#{loteController.selected.fechavencimiento}" title="#{bundle.EditLoteTitle_fechavencimiento}" required="true" requiredMessage="#{bundle.EditLoteRequiredMessage_fechavencimiento}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditLoteLabel_producto}" for="producto" />
+                        <p:selectOneMenu id="producto" value="#{loteController.selected.producto}" required="true" requiredMessage="#{bundle.EditLoteRequiredMessage_producto}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{productoController.itemsAvailableSelectOne}"
+                                           var="productoItem" itemLabel="#{productoItem.nombreProducto}"
+                                           itemValue="#{productoItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{loteController.update}" value="#{bundle.Save}" update="display,:LoteListForm:datalist,:growl" oncomplete="handleSubmit(args, 'LoteEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="LoteEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

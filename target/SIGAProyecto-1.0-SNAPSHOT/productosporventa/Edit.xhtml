@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ProductosporventaEditDlg" widgetVar="ProductosporventaEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditProductosporventaTitle}">
+            <h:form id="ProductosporventaEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{productosporventaController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditProductosporventaLabel_productosporventaPK_productoidProducto}" for="productosporventaPK_productoidProducto" />
+                        <p:inputText id="productosporventaPK_productoidProducto" value="#{productosporventaController.selected.productosporventaPK.productoidProducto}" title="#{bundle.EditProductosporventaTitle_productosporventaPK_productoidProducto}" required="true" requiredMessage="#{bundle.EditProductosporventaRequiredMessage_productosporventaPK_productoidProducto}"/>
+                        <p:outputLabel value="#{bundle.EditProductosporventaLabel_productosporventaPK_facturaidFactura}" for="productosporventaPK_facturaidFactura" />
+                        <p:inputText id="productosporventaPK_facturaidFactura" value="#{productosporventaController.selected.productosporventaPK.facturaidFactura}" title="#{bundle.EditProductosporventaTitle_productosporventaPK_facturaidFactura}" required="true" requiredMessage="#{bundle.EditProductosporventaRequiredMessage_productosporventaPK_facturaidFactura}"/>
+                        <p:outputLabel value="#{bundle.EditProductosporventaLabel_cantidadProductos}" for="cantidadProductos" />
+                        <p:inputText id="cantidadProductos" value="#{productosporventaController.selected.cantidadProductos}" title="#{bundle.EditProductosporventaTitle_cantidadProductos}" required="true" requiredMessage="#{bundle.EditProductosporventaRequiredMessage_cantidadProductos}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{productosporventaController.update}" value="#{bundle.Save}" update="display,:ProductosporventaListForm:datalist,:growl" oncomplete="handleSubmit(args, 'ProductosporventaEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ProductosporventaEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

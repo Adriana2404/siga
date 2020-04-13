@@ -1,0 +1,69 @@
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-button {
+    margin-top: 10px !important;
+}
+.ui-datatable-tablewrapper{
+min-height: 250px;
+}
+
+.ui-layout-unit, .ui-layout-unit .ui-layout-unit-content{
+    padding: 0 !important;
+}
+
+.headerProduct{
+    background-color: red;
+}
+.textBanner{
+    color: white;
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    top: 0;
+    line-height: 50%;
+}
+
+.headerText{
+    position: absolute;
+    top: 50%;
+    font-size: 30px;
+    left: 50px;
+}
+.footercontainer{
+    text-align: center; 
+    padding: 7px; 
+    background-color: #589bd7; 
+    color: #fff;
+}
+
+.ui-menubar{
+    background-color: red !important;
+}
+
+.ui-layout-unit-header  {
+    border: 1px solid #589bd7;
+    background: #589bd7 !important;
+}
+
+.ui-datatable-header, .ui-paginator{
+    background: #589bd7;
+}
+
+.ui-layout-north{
+    border: 0;
+}

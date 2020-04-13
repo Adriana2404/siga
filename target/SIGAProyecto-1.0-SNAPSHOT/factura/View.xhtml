@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <style>
+            .font-factura{
+                font-size: 17px;
+            }
+        </style>
+        <p:dialog id="FacturaViewDlg" widgetVar="FacturaViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewFacturaTitle}">
+            <h:form id="FacturaViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid  rendered="#{facturaController.selected != null}">
+                        <p:row>
+                            <p:column style="font-weight: bold;">
+                                <h:outputText styleClass="font-factura" value="#{bundle.ViewFacturaLabel_idFactura}"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <h:outputText styleClass="font-factura" value="#{facturaController.selected.idFactura}" title="#{bundle.ViewFacturaTitle_idFactura}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="font-weight: bold;">
+                                <h:outputText styleClass="font-factura" value="#{bundle.ViewFacturaLabel_numfactura}"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <h:outputText styleClass="font-factura" value="#{facturaController.selected.numfactura}" title="#{bundle.ViewFacturaTitle_numfactura}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="font-weight: bold;">
+                                <h:outputText styleClass="font-factura" value="#{bundle.ViewFacturaLabel_fecha}"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <h:outputText styleClass="font-factura" value="#{facturaController.selected.fecha}" title="#{bundle.ViewFacturaTitle_fecha}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column style="font-weight: bold;">
+                                <h:outputText styleClass="font-factura" value="#{bundle.ViewFacturaLabel_vendedor}"/>
+                            </p:column>
+                            <p:column colspan="3">
+                                <h:outputText styleClass="font-factura" value="#{facturaController.selected.vendedor.primerNombre} #{facturaController.selected.vendedor.primerApellido}" title="#{bundle.ViewFacturaTitle_vendedor}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="1" style="font-weight: bold; background-color: #eee">
+                                <h:outputText styleClass="font-factura" value="#{bundle.sDescription}"/>
+                            </p:column>
+                            <p:column colspan="1" style="font-weight: bold; background-color: #eee">
+                                <h:outputText styleClass="font-factura" value="#{bundle.sAmount}"/>
+                            </p:column>
+                            <p:column colspan="1" style="font-weight: bold; background-color: #eee">
+                                <h:outputText styleClass="font-factura" value="#{bundle.sUnit}"/>
+                            </p:column>
+                            <p:column colspan="1" style="font-weight: bold; background-color: #eee">
+                                <h:outputText styleClass="font-factura" value="#{bundle.sPrice}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                        
+                            
+                                <p:column colspan="1">
+                                    <ui:repeat value="#{facturaController.productosventa}" var="pr">
+                                    <h:outputText styleClass="font-factura" value="#{pr.nombreProducto} "/>
+                                    <h:outputText styleClass="font-factura" value="#{pr.contenido} #{pr.unidadDeMedida}"/><br></br>
+                                    </ui:repeat>
+                                </p:column>
+                                <p:column colspan="1" style="font-weight: bold;">
+                                    <ui:repeat value="#{facturaController.productosventa}" var="pr">
+                                        <h:outputText styleClass="font-factura" value="#{pr.cantidadProductos}"/><br />
+                                    </ui:repeat>
+                                </p:column>
+                                <p:column colspan="1" style="font-weight: bold;">
+                                    <ui:repeat value="#{facturaController.productosventa}" var="pr">
+                                        <h:outputText styleClass="font-factura" value="$#{pr.valor}"/><br /> 
+                                    </ui:repeat>
+                                </p:column>
+                                <p:column colspan="1" style="font-weight: bold;">
+                                    <ui:repeat value="#{facturaController.productosventa}" var="pr">
+                                        <h:outputText styleClass="font-factura" value="$#{pr.cantidadProductos * pr.valor}"/><br /> 
+                                    </ui:repeat>
+                                </p:column>                        
+                            </p:row>
+                        <p:row>
+                            <p:column colspan="3" style="font-weight: bold;">
+                                <h:outputText styleClass="font-factura" value="Total: "/>
+                            </p:column>
+                            <p:column colspan="1">
+                                <script>
+                                    var total = 0;
+                                    var arr = [];
+                                    var contador = 0;
+                                </script>
+                                <ui:repeat value="#{facturaController.productosventa}" var="pr">
+                                    <script>
+                                        arr[contador] = '#{pr.cantidadProductos * pr.valor}';
+                                        contador++;
+                                    </script>
+                                </ui:repeat>
+                                <script>
+                                    arr.forEach((element) => {
+                                        total = total + parseInt(element);
+                                      });
+                                    document.getElementById("totalDiv").innerHTML="$" + total;
+                                </script>
+                                <div class="font-factura" id="totalDiv">
+                                    
+                                </div>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    
+                </h:panelGroup>
+                <div style="display: flex">
+                    <p:commandButton icon="ui-icon-closethick" value="#{bundle.Close}" onclick="FacturaViewDialog.hide()"  style="display:block;margin-bottom: 20px"/>
+                    <p:commandButton value="#{bundle.sPrint}" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px" disabled="#{facturaController.selected.estado != 'Terminado'}">
+                        <p:printer target="display" />
+                    </p:commandButton>
+                    <span style="margin-top: 15px; font-size: 8px" ><h:outputText value="Para imprimir, la factura debe estar Terminada" rendered="#{facturaController.selected.estado != 'Terminado'}"/></span>
+                    </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

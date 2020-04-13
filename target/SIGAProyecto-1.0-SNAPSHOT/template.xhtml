@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title><ui:insert name="title">Default Title</ui:insert></title>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+        <link href="https://fonts.googleapis.com/css?family=Bellota&amp;display=swap" rel="stylesheet" />
+    </h:head>
+
+    <h:body>
+        <ui:fragment rendered="#{request.getSession(false).getAttribute('role') != null}">
+        <p:growl id="growl" life="3000" />
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="north" size="100" header="#{bundle.AppName}">
+                <f:facet name="header">
+                    <p:graphicImage library="img" name="banner.png" height="40"/>
+                    <!--<h:outputLabel style="margin-left: 20px;font-family: 'Bellota', cursive; font-size: 30px" value="#{bundle.AppName}"/>-->
+                    
+                </f:facet>
+                
+                <h:form id="menuForm">
+                    <p:menubar style="background-color: red !important">
+                        <p:menuitem value="#{bundle.Home}" outcome="/dashboard.xhtml" icon="ui-icon-home"/>
+                        
+                        <f:facet name="options">
+                            <h:outputText value="#{request.getSession(false).getAttribute('rol')}"></h:outputText>
+                            <p:commandLink  ajax="false" action="#{langController.switchLanguage('en')}" style="margin-right: 6px">
+                                <p:graphicImage library="img" name="us.png" height="24"/>
+                            </p:commandLink>
+                            <p:commandLink  ajax="false" action="#{langController.switchLanguage('es')}">
+                                <p:graphicImage library="img" name="co.png" height="24"/>
+                            </p:commandLink>
+                        </f:facet>
+                    </p:menubar>
+                    
+                </h:form>
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="west" size="175" header="Menu" collapsible="true">
+                <h:form id="menuFormWest">
+                    <p:panelMenu>
+                        
+                        <p:submenu label="#{bundle.ListProductosTitle}" >
+                            <p:menuitem rendered="#{request.getSession(false).getAttribute('role') == 'Empleado'}" value="#{bundle.ListInventarioTitle}" outcome="/inventario/List.xhtml" />
+                            <p:menuitem rendered="#{request.getSession(false).getAttribute('role') == 'Empleado'}" value="#{bundle.ListLoteTitle}" outcome="/lote/List.xhtml" />
+                            <p:menuitem value="#{bundle.ListProductoTitle}" outcome="/producto/List.xhtml" />
+                            <p:menuitem value="#{bundle.ListTipoproductoTitle}" outcome="/tipoproducto/List.xhtml" />
+                        </p:submenu>
+                       
+                        <p:submenu label="#{bundle.ListVentasTitle}">
+                            <p:menuitem value="#{bundle.Order}" outcome="/factura/List.xhtml" rendered="#{request.getSession(false).getAttribute('role') == 'Cliente'}" />
+                            <p:menuitem value="#{bundle.ListFacturaTitle}" outcome="/factura/List.xhtml" rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" />
+                            <p:menuitem value="#{bundle.ListPuntoTitle}" rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}" outcome="/punto/List.xhtml" />
+                        </p:submenu>
+                        <p:submenu label="#{bundle.ListProveedorTitle}" rendered="#{request.getSession(false).getAttribute('role') != 'Cliente'}">
+                            <p:menuitem value="#{bundle.ListProveedorTitle}" outcome="/proveedor/List.xhtml" />
+                            <p:menuitem rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" value="#{bundle.ListTipodocumentoTitle}" outcome="/tipodocumento/List.xhtml" />
+                            <p:menuitem rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" value="#{bundle.ListBarrioTitle}" outcome="/barrio/List.xhtml" />
+                            <p:menuitem rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" value="#{bundle.ListCiudadTitle}" outcome="/ciudad/List.xhtml" />           
+                        </p:submenu>
+                        <p:submenu rendered="#{request.getSession(false).getAttribute('role') == 'Administrador'}" label="#{bundle.ListUsuarioTitle}">
+                            <p:menuitem value="#{bundle.ListRolTitle}" outcome="/rol/List.xhtml" />
+                            <p:menuitem value="#{bundle.ListUsuarioTitle}" outcome="/usuario/List.xhtml" />
+                        </p:submenu>
+                    </p:panelMenu>
+                </h:form>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="south" size="30">
+                <div class="footercontainer">
+                    Sistema de Información Granero el Auténtico |
+                    Todos los derechos reservados - 2020
+                </div>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center">
+                <ui:insert name="body"/>
+            </p:layoutUnit>
+        
+        </p:layout>
+        
+        <style type="text/css">
+        .ui-stack {
+            z-index: 1200;
+        }
+        </style>
+        <h:form>
+            <p:stack icon="/resources/img/stack.png" expanded="true">
+                <p:menuitem value="#{bundle.Salir}" url="/LogoutServlet" icon="/resources/img/out.png" />
+                <p:menuitem value="#{request.getSession(false).getAttribute('role')}" icon="/resources/img/role.png" />
+                <p:menuitem value="#{request.getSession(false).getAttribute('user')}" icon="/resources/img/user.png" />
+                
+            </p:stack>
+        </h:form>
+        </ui:fragment>
+        <ui:fragment rendered="#{request.getSession(false).getAttribute('role') == null}">
+            
+            <script>
+                window.location.replace('#{request.contextPath}/login.xhtml');
+            </script>
+        </ui:fragment>
+    </h:body>
+
+</html>
